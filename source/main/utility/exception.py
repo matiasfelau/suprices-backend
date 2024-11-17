@@ -1,0 +1,2 @@
+class PriceException(Exception):
+    pass
