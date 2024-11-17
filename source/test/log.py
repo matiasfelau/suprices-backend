@@ -1,14 +1,14 @@
 import unittest
 
-from util import logger
-from util.enumeration import LogTypes
+from source.main.utility import logger
+from source.main.utility.enum import LogTypes
 
 
 class LoggerTest(unittest.TestCase):
 
 
     def test_logging(self):
-        logger.console_log(LogTypes.INFO.value,'El sistema de logeo está siendo probado')
+        logger.console_log(LogTypes.INFO.value, 'El sistema de logeo está siendo probado')
         print("\n¿El resultado es correcto? (Y/N): ", end="")
         user_input = input().strip().upper()
         if user_input == "Y":
