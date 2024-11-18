@@ -1,6 +1,5 @@
-from source.main.utility import logger
-from source.main.utility.enum import LogTypes
-from source.main.utility.exception import PriceException
+from source.main.utility.enumeration import LogTypes
+from source.main.utility.exception import PriceException, CalculatorException
 from source.main.utility.logger import console_log
 
 
@@ -10,14 +9,20 @@ def calculate_price(market_price):
     :param market_price: Espera un float que represente en n decimales el precio de mercado del producto.
     :return: Devuelve un float que representa en dos decimales el precio de venta del producto.
     """
+    console_log(LogTypes.INFO, f'Calculando el precio...')
     try:
-        console_log(LogTypes.INFO.value, f'Inicializando calculadora')
         maximized_price = maximize_price(market_price)
-        return truncate_price(maximized_price)
-    except PriceException:
-        pass
+        trucated_price = truncate_price(maximized_price)
+        console_log(LogTypes.INFO, 'El precio fue calculado exitosamente')
+        return trucated_price
+    except PriceException as e:
+        message = str(e)
+        console_log(LogTypes.WARNING, 'La calculadora no pudo finalizar el procesamiento')
+        raise PriceException(message)
     except Exception as e:
-        console_log(LogTypes.ERROR.value, e)
+        message = str(e)
+        console_log(LogTypes.ERROR, message)
+        raise CalculatorException(message)
 
 
 def maximize_price(market_price):
@@ -27,12 +32,13 @@ def maximize_price(market_price):
     :param market_price: Espera un float que represente en n decimales el precio de mercado del producto.
     :return: Devuelve un float que representa en n decimales el precio maximizado del producto.
     """
+    console_log(LogTypes.INFO, f'Maximizando precio de mercado: {market_price}')
     try:
-        console_log(LogTypes.INFO.value, f'Maximizando precio de mercado: {market_price}')
         return market_price * 2 - 0.01
     except Exception as e:
-        console_log(LogTypes.ERROR.value, e)
-        raise PriceException()
+        message = str(e)
+        console_log(LogTypes.ERROR, message)
+        raise PriceException(message)
 
 
 def truncate_price(maximized_price):
@@ -41,9 +47,10 @@ def truncate_price(maximized_price):
     :param maximized_price: Espera un float que represente en n decimales el precio maximizado del producto.
     :return: Devuelve un float que representa en dos decimales el precio de venta del producto.
     """
+    console_log(LogTypes.INFO, f'Truncando precio maximizado: {maximized_price}')
     try:
-        console_log(LogTypes.INFO.value, f'Truncando precio maximizado: {maximized_price}')
         return int(maximized_price * 100) / 100
     except Exception as e:
-        console_log(LogTypes.ERROR.value, e)
-        raise PriceException()
+        message = str(e)
+        console_log(LogTypes.ERROR, message)
+        raise PriceException(message)

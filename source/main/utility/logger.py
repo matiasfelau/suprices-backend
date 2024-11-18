@@ -2,38 +2,62 @@ import inspect
 import os
 from datetime import datetime, timezone, timedelta
 
+from colorama import Style, Fore
+
+from source.main.utility.enumeration import LogTypes
+
 
 def console_log(log_type, log_message):
     """
-
-    :param log_type:
+    Imprime un log en la terminal
+    :param log_type: Elemento de utility.enumeration.LogTypes
     :param log_message:
     :return:
     """
     try:
+        color = get_log_color(log_type)
         current_time = get_current_time()
         log_origin = get_log_origin()
-        print(f'\n[{current_time}] {log_type}: [{log_message}] IN [{log_origin}]', end="")
+        print(color + f'\n[{current_time}] {log_type}: [{log_message}] IN [{log_origin}]' + Style.RESET_ALL, end="")
     except Exception as e:
-        print(e)
+        print(str(e))
+
+
+def get_log_color(log_type):
+    """
+    Asigna un color al log en base a su tipo
+    :param log_type:
+    :return: Elemento de Fore
+    """
+    try:
+        if log_type == LogTypes.INFO:
+            return Fore.GREEN
+        elif log_type == LogTypes.WARNING:
+            return Fore.YELLOW
+        elif log_type == LogTypes.ERROR:
+            return Fore.RED
+        else:
+            raise Exception(f'Tipo de log inválido: {log_type}')
+    except Exception as e:
+        raise Exception(str(e))
 
 
 def get_current_time():
     """
 
-    :return:
+    :return: Devuelve la fecha y la hora actuales
     """
     try:
         current_time = datetime.now()  # Obtiene la fecha y la hora actuales.
         return current_time.strftime("%Y-%m-%d %H:%M:%S")
     except Exception as e:
-        raise Exception(e)
+        raise Exception(str(e))
 
 
 def get_log_origin():
     """
 
-    :return:
+    :return: Devuelve la ruta al metodo invocador
     """
     try:
         caller_frame = inspect.stack()[2] # Obtiene la función que invocó al log desde el stack de ejecución.
@@ -43,4 +67,4 @@ def get_log_origin():
         caller_name = caller_frame.function # Obtiene el nombre de la función.
         return f'{caller_path}::{caller_name}'
     except Exception as e:
-        raise Exception(e)
+        raise Exception(str(e))

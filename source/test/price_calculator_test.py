@@ -1,6 +1,6 @@
 import unittest
 
-from source.main.service.calculate_price import calculate_price
+from source.main.service.price_calculator_service import calculate_price
 
 
 class CalculatePriceTest(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
 
 from source.main.utility import logger
-from source.main.utility.enum import LogTypes
+from source.main.utility.enumeration import LogTypes
 
 
 class LogTest(unittest.TestCase):
